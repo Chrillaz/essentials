@@ -4,115 +4,83 @@ namespace Essentials;
 
 use Essentials\Utilities as Util;
 
-use Essentials\Resources\Storage;
-
 use \Illuminate\Container\Container;
 
 class Essentials extends Container {
 
-  protected static $instance;
+  protected $basepath;
 
-  protected $repository;
+  protected $namespace;
 
-  public function __construct () {
+  public function __construct ( string $namespace, string $basepath ) {
 
-    $this->repository = new Storage();
+    $this->basepath = $basepath;
+
+    $this->namespace = $namespace;
+
+    $this->bindModules();
   }
 
-  public function registerApp ( string $type, string $path ): void {
+  private function bindModules () {
 
-    $this->repository->set( $type, $path );
-  }
+    $bindings = require __DIR__ . '/Bindings.php';
 
-  public function getRegisteredApps () {
+    if ( \file_exists( $config = $this->getBasepath() . '/Config.php' ) ) {
 
-    return $this->repository->all();
-  }
+      $config = require $config;
 
-  public function bootstrap () {
+      if ( isset( $config['bindings'] ) ) {
 
-    $this->bind( '\\Essentials\\Contracts\\StorageInterface'::class, '\\Essentials\\Resources\\Storage'::class );
-
-    $this->bind( '\\Essentials\\Contracts\\AssetInterface'::class, '\\Essentials\\Resources\\Asset'::class );
-
-    foreach ( $this->getRegisteredApps() as $namespace => $app ) {
-
-      if ( file_exists( $config = $app . '/Config.php' ) ) {
-
-        $config = require $config;
-
-        array_map( function ( $key, $config ) {
-
-          return $this->instance( $key, $config );
-        }, 
-          array_keys( $config ),
-          $config
-        );
-
-        /**
-         * Bind modules
-         */
-        array_map( function ( $module, $implementation ) {
-
-          if ( $implementation instanceof \Closure ) {
-
-            return $this->bind( $module, function ( $app ) use ( $implementation ) {
-
-              return $implementation();
-            });
-          }
-
-          return $this->bind( $module, $implementation );
-        }, 
-          array_keys( $this['bindings'] ),
-          $this['bindings'] 
+        $bindings['bindings'] = array_merge(
+          $config['bindings'],
+          $bindings['bindings']
         );
       }
+    }
 
-      if ( Util::dirExists( $app . '/Options' ) ) {
+    array_map( function ( $interface, $implementation ) {
 
-        Util::directoryIterator( $namespace, $app . '/Options', function ( $option ) {
-          
-          $this->singleton( $option->qualifiedname, function () use ( $option ) {
+      if ( $implementation instanceof \Closure ) {
 
-            return $option->qualifiedname::register( $this );
-          });
+        return $this->bind( $interface, function ( $container ) use ( $implementation ) {
+
+          return $implementation();
         });
       }
 
-      if ( Util::dirExists( $app ) ) {
-
-        if ( Util::dirExists( $app . '/Services' ) ) {
-
-          Util::directoryIterator( $namespace, $app . '/Services', function ( $service ) {
-  
-            $this->singleton( $service->qualifiedname );
-          });
-        }
-        
-        array_map( function ( $directory ) use ( $namespace ) {
-
-          if ( Util::dirExists( $directory ) ) {
-
-            Util::directoryIterator( $namespace, $directory, function ( $module ) {
-  
-              $module = $this->make( $module->qualifiedname );
-  
-              $module->register();
-            });
-          }
-        }, [
-          $app . '/Integrations',
-          $app . '/Hooks'
-        ]);
-      }
-    }
+      $this->bind( $interface, $implementation );
+    },
+      array_keys( $bindings['bindings'] ),
+      $bindings['bindings']
+    );
   }
 
-  public static function create () {
+  public function setConfig ( array $config ) {
 
-    if ( is_null( self::$instance ) ) self::$instance = new Essentials();
+    array_map( function ( $key, $config ) {
 
-    return self::$instance;
+      if ( $key !== 'bindings' ) {
+
+        return $this->instance( $key, $config );
+      }
+    },
+      array_keys( $config ),
+      $config
+    );
+  }
+
+  public function getBasepath () {
+
+    return $this->basepath;
+  }
+
+  public function getNamespace () {
+
+    return $this->namespace;
+  }
+
+  public static function create ( ...$args ) {
+
+    return new Essentials( ...$args );
   }
 }

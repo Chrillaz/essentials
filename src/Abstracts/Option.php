@@ -2,7 +2,9 @@
 
 namespace Essentials\Abstracts;
 
-use Essentials\Contracts\OptionInterface;
+use \Essentials\Essentials;
+
+use \Essentials\Contracts\OptionInterface;
 
 abstract class Option implements OptionInterface {
 
@@ -93,5 +95,5 @@ abstract class Option implements OptionInterface {
     }
   }
 
-  abstract public static function register ( \Essentials\Essentials $app );
+  abstract public static function register ( Essentials $container ): OptionInterface;
 }

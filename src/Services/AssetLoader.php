@@ -14,12 +14,12 @@ class AssetLoader extends Loader {
 
   public function addScript ( string $handle, string $file = '' ) {
 
-    $asset = $this->app->makeWith( Asset::class, [
+    $asset = $this->container->makeWith( Asset::class, [
       'handle' => $handle,
       'file'   => $file
     ]);
       
-    $script = $this->app->makeWith( Script::class, [
+    $script = $this->container->makeWith( Script::class, [
       'asset' => $asset
     ]);
 
@@ -30,12 +30,12 @@ class AssetLoader extends Loader {
 
   public function addStyle ( string $handle, string $file = '' ) {
 
-    $asset = $this->app->makeWith( Asset::class, [
+    $asset = $this->container->makeWith( Asset::class, [
       'handle' => $handle,
       'file'   => $file
     ]);
 
-    $style = $this->app->makeWith( Style::class, [
+    $style = $this->container->makeWith( Style::class, [
       'asset' => $asset
     ]);
 

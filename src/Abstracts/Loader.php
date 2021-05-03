@@ -12,13 +12,13 @@ abstract class Loader implements LoaderInterface {
 
   protected $queue;
   
-  protected $app;
+  protected $container;
 
-  public function __construct ( StorageInterface $storage, Essentials $app ) {
+  public function __construct ( StorageInterface $storage, Essentials $container ) {
 
     $this->queue = $storage;
 
-    $this->app = $app;
+    $this->container = $container;
   }
 
   protected function add ( string $queue, $value ): void {

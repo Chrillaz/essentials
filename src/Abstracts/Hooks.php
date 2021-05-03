@@ -10,13 +10,13 @@ abstract class Hooks {
 
   protected $hooks;
 
-  protected $app;
+  protected $container;
 
-  public function __construct ( HookLoader $hooks, Essentials $app ) {
+  public function __construct ( HookLoader $hooks, Essentials $container ) {
 
     $this->hooks = $hooks;
 
-    $this->app = $app;
+    $this->container = $container;
   }
 
   abstract public function register (): void;

@@ -6,10 +6,3 @@
  */
 
 require __DIR__ . '/vendor/autoload.php';
-
-$essentials = \Essentials\Essentials::create();
-
-$essentials->singleton( \Essentials\Essentials::class, function ( $app ) {
-
-  return $app;
-});

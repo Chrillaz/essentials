@@ -10,7 +10,7 @@ class Utilities {
       new \RecursiveDirectoryIterator( $path ), 
       function ( $current, $key, $iterator ) {
 
-        return ( pathinfo( $name = $current->getFileName(), PATHINFO_EXTENSION) || $name[0] !== '.' );
+        return ( pathinfo( $name = $current->getFileName(), PATHINFO_EXTENSION ) && $name[0] !== '.' );
       }
     );
 
@@ -20,7 +20,7 @@ class Utilities {
 
       $parts = explode( 'src/', $path = $info->getPath() );
 
-      $namespace = $namespace . str_replace( '/', '\\', end( $parts ) );
+      $namespace = $namespace . '\\' . end( $parts );
 
       $qualifiedname = $namespace . '\\' . $name . ''::class;
 

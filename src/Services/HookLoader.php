@@ -10,14 +10,14 @@ class HookLoader extends Loader {
 
   public function addAction ( ...$args ): void {
     
-    $this->add( 'actions', $this->app->make( hook::class, [
+    $this->add( 'actions', $this->container->make( hook::class, [
       'args' => $args 
     ]));
   }
 
   public function addFilter ( ...$args ): void {
 
-    $this->add( 'filters', $this->app->make( hook::class, [
+    $this->add( 'filters', $this->container->make( hook::class, [
       'args' => $args 
     ]));
   }
