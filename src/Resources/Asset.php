@@ -2,6 +2,8 @@
 
 namespace Essentials\Resources;
 
+use Essentials\Essentials;
+
 use Essentials\Contracts\StorageInterface;
 
 use Essentials\Contracts\AssetInterface;
