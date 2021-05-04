@@ -20,7 +20,13 @@ class Utilities {
 
       $parts = explode( 'src/', $path = $info->getPath() );
 
-      $namespace = $namespace . '\\' . end( $parts );
+      if ( false !== strpos( $namespace, end( $parts ) ) ) {
+
+        $namespace = $namespace;
+      } else {
+
+        $namespace = $namespace . '\\' . end( $parts );
+      }
 
       $qualifiedname = $namespace . '\\' . $name . ''::class;
 
