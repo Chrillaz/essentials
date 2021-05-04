@@ -2,9 +2,9 @@
 
 namespace Essentials\Abstracts;
 
-use \Essentials\Essentials;
+use Essentials\Essentials;
 
-use \Essentials\Contracts\OptionInterface;
+use Essentials\Contracts\OptionInterface;
 
 abstract class Option implements OptionInterface {
 
