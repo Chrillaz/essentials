@@ -18,7 +18,7 @@
   ],
   "autoload": {
     "psr-4": {
-      "Essentials\\": "src/"
+      "Essentials\\": ""
     }
   },
   "require-dev": {
