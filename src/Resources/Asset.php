@@ -16,17 +16,17 @@ class Asset implements AssetInterface {
 
   private $file;
 
-  public function __construct ( StorageInterface $data, $handle, $file ) {
+  public function __construct ( StorageInterface $data, Essentials $container, $handle, $file ) {
 
     $this->data = $data;
 
     $this->handle = $handle;
 
     if ( ! empty( $file ) ) {
-
-      $this->version = \filemtime( \get_template_directory() . '/assets' . $file );
       
-      $this->file = \get_template_directory_uri() . '/assets' . $file;
+      $this->version = filemtime( $container->getBasepath( '/assets' . $file ) );
+      
+      $this->file = $container->getBaseuri( '/assets' . $file );
     }
   }
 

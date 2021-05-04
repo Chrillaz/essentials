@@ -8,7 +8,7 @@ use \Essentials\Abstracts\Option;
 
 use \Essentials\Contracts\OptionInterface;
 
-final class ClassName extends Option {
+final class ClassName extends Option implements OptionInterface {
 
   public static function register ( Essentials $container ): OptionInterface {
 

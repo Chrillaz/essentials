@@ -8,15 +8,21 @@ use \Illuminate\Container\Container;
 
 class Essentials extends Container {
 
+  protected $namespace;
+  
   protected $basepath;
 
-  protected $namespace;
+  protected $baseuri;
 
-  public function __construct ( string $namespace, string $basepath ) {
+  public function __construct ( array $args ) {
 
-    $this->basepath = $basepath;
+    extract( $args );
 
-    $this->namespace = $namespace;
+    $this->namespace = isset( $namespace ) ? $namespace : '';
+    
+    $this->basepath = isset( $basepath ) ? $basepath : '';
+
+    $this->baseuri = isset( $assetpath ) ? $assetpath : '';
 
     $this->bindModules();
   }
@@ -25,7 +31,7 @@ class Essentials extends Container {
 
     $bindings = require __DIR__ . '/Bindings.php';
 
-    if ( \file_exists( $config = $this->getBasepath() . '/Config.php' ) ) {
+    if ( \file_exists( $config = $this->getBasepath( '/src/Config.php' ) ) ) {
 
       $config = require $config;
 
@@ -69,9 +75,23 @@ class Essentials extends Container {
     );
   }
 
-  public function getBasepath () {
+  public function getBasepath ( string $relpath = null ) {
 
+    if ( ! is_null( $relpath ) ) {
+
+      return $this->basepath . $relpath;
+    }
     return $this->basepath;
+  }
+
+  public function getBaseuri ( string $relpath = null ) {
+
+    if ( ! is_null( $relpath ) ) {
+
+      return $this->baseuri . $relpath;
+    }
+
+    return $this->baseuri;
   }
 
   public function getNamespace () {
