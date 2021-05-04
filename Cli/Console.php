@@ -32,16 +32,16 @@ final class Console {
     return $command;
   }
 
-  protected function make ( array $args ) {
+  protected function make ( string $command, array $args ) {
 
-    if ( isset( $args[2] ) && $command = $this->getCommand( $args[2] ) ) {
+    if ( isset( $args[2] ) ) {
       
       if ( ! \file_exists( $dir = $this->basepath . \ucfirst( '/' . $command . 's/' ) ) ) {
 
         $dir = \mkdir( $dir );
       }
 
-      $filename = $dir . trim( $name = $args[3] ) . '.php';
+      $filename = $dir . trim( $name = $args[2] ) . '.php';
 
       $content = \file_get_contents( __DIR__ . "/templates/$command" . ".php" );
 
@@ -53,17 +53,15 @@ final class Console {
 
       echo $name . " created. \n\n";
     }
+
+    exit;
   }
 
   public function runCommand ( array $args ) {
 
-    if ( isset( $args[1] ) ) {
+    if ( isset( $args[1] ) && $command = $this->getCommand( $args[1] ) ) {
 
-      switch ( $args[1] ) {
-        case 'make' :
-          $this->make( $args );
-          break;
-      }
+      $this->make( $command, $args );
     }
   }
 }

@@ -8,41 +8,75 @@ use \Illuminate\Container\Container;
 
 class Essentials extends Container {
 
+  protected $config;
+
   protected $namespace;
   
   protected $basepath;
 
-  protected $baseuri;
+  protected $publicpath;
 
   public function __construct ( array $args ) {
-
+    
     extract( $args );
 
-    $this->namespace = isset( $namespace ) ? $namespace : '';
-    
     $this->basepath = isset( $basepath ) ? $basepath : '';
 
-    $this->baseuri = isset( $assetpath ) ? $assetpath : '';
+    $this->publicpath = isset( $publicpath ) ? $publicpath : '';
+
+    $this->getNamespace();
+
+    $this->registerConfig();
+
+    $this->bindReusableModules();
 
     $this->bindModules();
+
+    $this->runHooks();
+  }
+
+  public function registerConfig () {
+
+    array_map( function ( $key, $config ) {
+
+      if ( $key !== 'bindings' ) {
+  
+        return $this->instance( $key, $config );
+      }
+    },
+      array_keys( $this->getConfig() ),
+      $this->getConfig()
+    );
+  }
+
+  private function bindReusableModules () {
+
+    $this->singleton( Essentials::class, function ( $container ) {
+
+      return $container;
+    });
+
+    Util::directoryIterator( $this->getBasepath( '/src/Options' ), function ( $option ) {
+
+      $this->singleton( $option->qualifiedname, function ( $container ) use ( $option ) {
+
+        return $option->qualifiedname::register( $container );
+      });
+    });
+
+    array_map( function ( $dir ) {
+
+      Util::directoryIterator( $dir, function ( $service ) {
+        
+        $this->singleton( $service->qualifiedname );
+      });
+    }, [
+      __DIR__ . '/Services',
+      $this->getBasepath( '/src/Services' )
+    ]);
   }
 
   private function bindModules () {
-
-    $bindings = require __DIR__ . '/Bindings.php';
-
-    if ( \file_exists( $config = $this->getBasepath( '/src/Config.php' ) ) ) {
-
-      $config = require $config;
-
-      if ( isset( $config['bindings'] ) ) {
-
-        $bindings['bindings'] = array_merge(
-          $config['bindings'],
-          $bindings['bindings']
-        );
-      }
-    }
 
     array_map( function ( $interface, $implementation ) {
 
@@ -56,51 +90,90 @@ class Essentials extends Container {
 
       $this->bind( $interface, $implementation );
     },
-      array_keys( $bindings['bindings'] ),
-      $bindings['bindings']
+      array_keys( $this->getConfig()['bindings'] ),
+      $this->getConfig()['bindings']
     );
   }
 
-  public function setConfig ( array $config ) {
+  private function runHooks () {
 
-    array_map( function ( $key, $config ) {
+    array_map( function ( $dir ) {
 
-      if ( $key !== 'bindings' ) {
+      Util::directoryIterator( $dir, function ( $hook ) {
 
-        return $this->instance( $key, $config );
+        $hook = $this->make( $hook->qualifiedname );
+
+        $hook->register();
+      });
+    }, [
+      $this->getBasepath( '/src/Hooks' )
+    ]);
+  }
+
+  public function getConfig () {
+
+    if ( ! is_null( $this->config ) ) {
+
+      return $this->config;
+    }
+
+    $coreconfig = require __DIR__ . '/Config.php';
+
+    if ( \file_exists( $config = $this->getBasepath( '/src/Config.php' ) ) ) {
+
+      $config = require_once $config;
+
+      foreach ( $config as $key => $value ) {
+
+        if ( isset( $coreconfig[$key] ) ) {
+
+          $coreconfig[$key] = array_merge(
+            $coreconfig[$key],
+            $value
+          );
+        } else {
+
+          $coreconfig[$key] = $value;
+        }
       }
-    },
-      array_keys( $config ),
-      $config
-    );
+    }
+    
+    return $this->config = $coreconfig;
   }
 
   public function getBasepath ( string $relpath = null ) {
 
-    if ( ! is_null( $relpath ) ) {
-
-      return $this->basepath . $relpath;
-    }
-    return $this->basepath;
+    return is_null( $relpath ) ? $this->basepath : $this->basepath . $relpath;
   }
 
-  public function getBaseuri ( string $relpath = null ) {
+  public function getPublicpath ( string $relpath = null ) {
 
-    if ( ! is_null( $relpath ) ) {
-
-      return $this->baseuri . $relpath;
-    }
-
-    return $this->baseuri;
+    return is_null( $relpath ) ? $this->publicpath : $this->publicpath . $relpath;
   }
 
   public function getNamespace () {
 
-    return $this->namespace;
+    if ( ! is_null( $this->namespace ) ) {
+
+      return $this->namespace;
+    }
+
+    $composer = \json_decode( \file_get_contents( $this->getBasepath( '/composer.json' ) ), true );
+
+    if ( isset( $composer['autoload'] ) && isset( $composer['autoload']['psr-4'] ) ) {
+      
+      foreach ( $composer['autoload']['psr-4'] as $namespace => $path ) {
+        
+        if ( 'src/' === strtolower( $path ) ) {
+
+          return $this->namespace = $namespace;
+        }
+      }
+    }
   }
 
   public static function create ( ...$args ) {
 
-    return new Essentials( ...$args );
+    return new Self( ...$args );
   }
 }

@@ -4,38 +4,38 @@ namespace Essentials;
 
 class Utilities {
 
-  public static function directoryIterator ( string $namespace, string $path, \Closure $callback ) {
+  public static function directoryIterator ( string $path, \Closure $callback ) {
 
     $filter = new \RecursiveCallbackFilterIterator( 
       new \RecursiveDirectoryIterator( $path ), 
       function ( $current, $key, $iterator ) {
-
-        return ( pathinfo( $name = $current->getFileName(), PATHINFO_EXTENSION ) && $name[0] !== '.' );
+        
+        return ( pathinfo( $name = $current->getFileName(), PATHINFO_EXTENSION ) === 'php' && $name[0] !== '.' );
       }
     );
 
     foreach ( new \RecursiveIteratorIterator( $filter ) as $info) {
 
       $name = $info->getBasename( '.php' );
-
-      $parts = explode( 'src/', $path = $info->getPath() );
-
-      if ( false !== strpos( $namespace, end( $parts ) ) ) {
-
-        $namespace = $namespace;
-      } else {
-
-        $namespace = $namespace . '\\' . end( $parts );
-      }
-
-      $qualifiedname = $namespace . '\\' . $name . ''::class;
+      
+      $namespace = self::getNamespace( $info->getPath() . '/' . $info->getBasename() );
 
       $callback( (object) [
         'name' => $name,
-        'path' => $path,
+        'path' => $info->getPath(),
         'namespace' => $namespace,
-        'qualifiedname' => $qualifiedname
+        'qualifiedname' => $namespace . '\\' . $name
       ]);
+    }
+  }
+
+  public static function getNamespace ( string $src ) {
+
+    $src = file_get_contents( $src );
+
+    if ( preg_match( '#^namespace\s+(.+?);$#sm', $src, $matches ) ) {
+        
+      return $matches[1];
     }
   }
 
