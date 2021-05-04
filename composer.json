@@ -3,7 +3,7 @@
   "description": "wordpress essentials, a set of abstractions to work on WP",
   "type": "package",
   "license": "MIT",
-  "homepage": "https://github.com/Chrillaz/wordpress-theme-scaffold",
+  "homepage": "https://github.com/Chrillaz/wordpress-essentials",
   "authors": [
     {
       "name": "Christoffer Öhman",
