@@ -1,7 +1,7 @@
 {
   "name": "chrillaz/wordpress-essentials",
-  "description": "wordpress essentials",
-  "type": "wordpress-plugin",
+  "description": "wordpress essentials, a set of abstractions to work on WP",
+  "type": "package",
   "license": "MIT",
   "homepage": "https://github.com/Chrillaz/wordpress-theme-scaffold",
   "authors": [
