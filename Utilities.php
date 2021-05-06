@@ -39,17 +39,17 @@ class Utilities {
   }
 
   public static function getNamespace ( string $src ) {
-
+    
     $src = file_get_contents( $src );
 
-    if ( preg_match( '#^namespace\s+(.+?);$#sm', $src, $matches ) ) {
-        
-      return $matches[1];
+    if ( preg_match( '#(namespace)(\\s+)([A-Za-z0-9\\\\]+?)(\\s*);#sm', $src, $matches ) ) {
+
+      return $matches[3];
     }
   }
 
   public static function dirExists ( string $path ) {
-
+    
     return ( \realpath( $path ) !== false && is_dir( $path ) );
   }
 }
