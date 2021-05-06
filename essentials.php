@@ -31,22 +31,14 @@ class Essentials extends Container {
     $this->bindReusableModules();
 
     $this->bindModules();
-
-    $this->runHooks();
   }
 
   public function registerConfig () {
 
-    array_map( function ( $key, $config ) {
+    foreach ( $this->getConfig() as $key => $config ) {
 
-      if ( $key !== 'bindings' ) {
-  
-        return $this->instance( $key, $config );
-      }
-    },
-      array_keys( $this->getConfig() ),
-      $this->getConfig()
-    );
+      $key !== 'bindings' ? $this->instance( $key, $config ) : null;
+    }
   }
 
   private function bindReusableModules () {
@@ -56,58 +48,26 @@ class Essentials extends Container {
       return $container;
     });
 
-    Util::directoryIterator( $this->getBasepath( '/src/Options' ), function ( $option ) {
-
-      $this->singleton( $option->qualifiedname, function ( $container ) use ( $option ) {
-
-        return $option->qualifiedname::register( $container );
-      });
-    });
-
-    array_map( function ( $dir ) {
-
-      Util::directoryIterator( $dir, function ( $service ) {
+    Util::directoryIterator( __DIR__ . '/Services', function ( $service ) {
         
-        $this->singleton( $service->qualifiedname );
-      });
-    }, [
-      __DIR__ . '/Services',
-      $this->getBasepath( '/src/Services' )
-    ]);
+      $this->singleton( $service->qualifiedname );
+    });
   }
 
   private function bindModules () {
 
-    array_map( function ( $interface, $implementation ) {
+    foreach ( $this->getConfig()['bindings'] as $interface => $implementation ) {
 
       if ( $implementation instanceof \Closure ) {
 
-        return $this->bind( $interface, function ( $container ) use ( $implementation ) {
+        $this->bind( $interface, function ( $container ) use ( $implementation ) {
 
           return $implementation();
         });
       }
 
       $this->bind( $interface, $implementation );
-    },
-      array_keys( $this->getConfig()['bindings'] ),
-      $this->getConfig()['bindings']
-    );
-  }
-
-  private function runHooks () {
-
-    array_map( function ( $dir ) {
-
-      Util::directoryIterator( $dir, function ( $hook ) {
-
-        $hook = $this->make( $hook->qualifiedname );
-
-        $hook->register();
-      });
-    }, [
-      $this->getBasepath( '/src/Hooks' )
-    ]);
+    }
   }
 
   public function getConfig () {
@@ -117,28 +77,28 @@ class Essentials extends Container {
       return $this->config;
     }
 
-    $coreconfig = require __DIR__ . '/Config.php';
+    $config = require __DIR__ . '/Config.php';
 
-    if ( \file_exists( $config = $this->getBasepath( '/src/Config.php' ) ) ) {
+    if ( \file_exists( $appconfig = $this->getBasepath( '/src/Config.php' ) ) ) {
 
-      $config = require_once $config;
+      $appconfig = require_once $appconfig;
 
-      foreach ( $config as $key => $value ) {
+      foreach ( $appconfig as $key => $value ) {
 
-        if ( isset( $coreconfig[$key] ) ) {
+        if ( isset( $config[$key] ) ) {
 
-          $coreconfig[$key] = array_merge(
-            $coreconfig[$key],
+          $config[$key] = array_merge(
+            $config[$key],
             $value
           );
         } else {
 
-          $coreconfig[$key] = $value;
+          $config[$key] = $value;
         }
       }
     }
     
-    return $this->config = $coreconfig;
+    return $this->config = $config;
   }
 
   public function getBasepath ( string $relpath = null ) {

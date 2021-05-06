@@ -6,6 +6,8 @@ class Utilities {
 
   public static function directoryIterator ( string $path, \Closure $callback ) {
 
+    $paths = [];
+
     $filter = new \RecursiveCallbackFilterIterator( 
       new \RecursiveDirectoryIterator( $path ), 
       function ( $current, $key, $iterator ) {
@@ -14,15 +16,22 @@ class Utilities {
       }
     );
 
-    foreach ( new \RecursiveIteratorIterator( $filter ) as $info) {
+    foreach ( new \RecursiveIteratorIterator( $filter ) as $info ) {
 
       $name = $info->getBasename( '.php' );
+
+      $path = $info->getPath();
       
-      $namespace = self::getNamespace( $info->getPath() . '/' . $info->getBasename() );
+      if ( empty( $paths ) || ! \array_key_exists( $path, $paths ) ) {
+
+        $paths[$path] = self::getNamespace( $path . '/' . $info->getBasename() );
+      }
+
+      $namespace = $paths[$path];
 
       $callback( (object) [
         'name' => $name,
-        'path' => $info->getPath(),
+        'path' => $path,
         'namespace' => $namespace,
         'qualifiedname' => $namespace . '\\' . $name
       ]);
