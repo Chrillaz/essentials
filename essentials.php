@@ -45,7 +45,7 @@ class Essentials extends Container {
 
     $this->singleton( Essentials::class, function ( $container ) {
 
-      return $container;
+      return $this;
     });
 
     Util::directoryIterator( __DIR__ . '/Services', function ( $service ) {
