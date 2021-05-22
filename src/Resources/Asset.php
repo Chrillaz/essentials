@@ -28,7 +28,7 @@ class Asset implements AssetInterface {
       
       $this->version = filemtime( $container->getBasepath( '/assets' . $file ) );
       
-      $this->file = $container->getBaseuri( '/assets' . $file );
+      $this->file = $container->getPublicpath( '/assets' . $file );
     }
   }
 
