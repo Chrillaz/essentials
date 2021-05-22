@@ -1,24 +1,18 @@
 {
   "name": "chrillaz/wordpress-essentials",
-  "description": "wordpress essentials, a set of abstractions to work on WP",
   "type": "package",
-  "license": "MIT",
+  "description": "wordpress essentials, a set of abstractions to work on WP",
   "homepage": "https://github.com/Chrillaz/wordpress-essentials",
+  "license": "MIT",
   "authors": [
     {
       "name": "Christoffer Öhman",
       "email": "totalchriz@gmail.com"
     }
   ],
-  "repositories": [
-    {
-      "type": "composer",
-      "url": "https://wpackagist.org"
-    }
-  ],
   "autoload": {
     "psr-4": {
-      "Essentials\\": ""
+      "Essentials\\": "src/"
     }
   },
   "require-dev": {
@@ -30,5 +24,6 @@
   },
   "require": {
     "illuminate/container": "^8.37"
-  }
+  },
+  "bin": ["bin/pds-skeleton"]
 }
