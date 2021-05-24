@@ -13,4 +13,6 @@ interface CacheInterface {
   public function delete ( string $key, string $group = 'default' ): bool;
   
   public function persist ( string $key, $value, $exp = DAY_IN_SECONDS ): bool;
+
+  public function flush ();
 }

@@ -53,6 +53,11 @@ class Cache implements CacheInterface {
     return false;
   }
 
+  public function flush () {
+
+    $this->cache->flush();
+  }
+
   public function persist ( string $key, $value, $exp = DAY_IN_SECONDS ): bool {
 
     return \set_transient( $key, $value, $exp );

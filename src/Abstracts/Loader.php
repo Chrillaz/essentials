@@ -16,9 +16,9 @@ abstract class Loader implements LoaderInterface {
 
   protected $group = 'loadergroup';
 
-  public function __construct ( CacheInterface $storage, Essentials $container ) {
+  public function __construct ( CacheInterface $cache, Essentials $container ) {
 
-    $this->queue = $storage;
+    $this->queue = $cache;
 
     $this->container = $container;
   }
@@ -35,11 +35,6 @@ abstract class Loader implements LoaderInterface {
     array_push( $queued, $value );
 
     $this->queue->set( $queue, $queued, $this->group );
-  }
-
-  protected function reset (): void {
-
-    $this->queue->flush();
   }
 
   abstract public function load (): void;

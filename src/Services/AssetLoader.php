@@ -50,7 +50,5 @@ class AssetLoader extends Loader {
 
       unset( $asset );
     }, $this->queue->get( 'assets' ) );
-
-    $this->reset();
   } 
 }

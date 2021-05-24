@@ -43,7 +43,5 @@ class HookLoader extends Loader {
         unset( $hook );
       }, $filters );
     }
-
-    $this->reset();
   }
 }
