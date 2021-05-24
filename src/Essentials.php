@@ -1,8 +1,8 @@
 <?php
 
-namespace Essentials;
+namespace Scaffold\Essentials;
 
-use Essentials\Utilities as Util;
+use Scaffold\Essentials\Utilities as Util;
 
 use \Illuminate\Container\Container;
 

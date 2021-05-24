@@ -1,1 +1,1 @@
-# WP Essentials
+# Scaffold Essentials

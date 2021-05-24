@@ -1,8 +1,8 @@
 <?php
 
-namespace Essentials\Resources;
+namespace Scaffold\Essentials\Resources;
 
-use Essentials\Contracts\StorageInterface;
+use Scaffold\Essentials\Contracts\StorageInterface;
 
 class Storage implements StorageInterface {
 

@@ -1,8 +1,8 @@
 <?php
 
-namespace Essentials\Resources;
+namespace Scaffold\Essentials\Resources;
 
-use Essentials\Contracts\HookInterface;
+use Scaffold\Essentials\Contracts\HookInterface;
 
 final class Hook implements HookInterface {
 

@@ -1,12 +1,12 @@
 <?php
 
-namespace Essentials\Abstracts;
+namespace Scaffold\Essentials\Abstracts;
 
-use Essentials\Essentials;
+use Scaffold\Essentials\Essentials;
 
-use Essentials\Contracts\StorageInterface;
+use Scaffold\Essentials\Contracts\StorageInterface;
 
-use Essentials\Contracts\LoaderInterface;
+use Scaffold\Essentials\Contracts\LoaderInterface;
 
 abstract class Loader implements LoaderInterface {
 

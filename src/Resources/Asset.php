@@ -1,12 +1,12 @@
 <?php
 
-namespace Essentials\Resources;
+namespace Scaffold\Essentials\Resources;
 
-use Essentials\Essentials;
+use Scaffold\Essentials\Essentials;
 
-use Essentials\Contracts\StorageInterface;
+use Scaffold\Essentials\Contracts\StorageInterface;
 
-use Essentials\Contracts\AssetInterface;
+use Scaffold\Essentials\Contracts\AssetInterface;
 
 class Asset implements AssetInterface {
 

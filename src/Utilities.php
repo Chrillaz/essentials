@@ -1,6 +1,6 @@
 <?php
 
-namespace Essentials;
+namespace Scaffold\Essentials;
 
 class Utilities {
 

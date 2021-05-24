@@ -1,10 +1,10 @@
 <?php
 
-namespace Essentials\Abstracts;
+namespace Scaffold\Essentials\Abstracts;
 
-use Essentials\Essentials;
+use Scaffold\Essentials\Essentials;
 
-use Essentials\Services\HookLoader;
+use Scaffold\Essentials\Services\HookLoader;
 
 abstract class Hooks {
 

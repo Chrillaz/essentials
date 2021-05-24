@@ -1,14 +1,14 @@
 <?php
 
-namespace Essentials\Services;
+namespace Scaffold\Essentials\Services;
 
-use Essentials\Resources\{
+use Scaffold\Essentials\Resources\{
   Asset,
   Style,
   Script
 };
 
-use Essentials\Abstracts\Loader;
+use Scaffold\Essentials\Abstracts\Loader;
 
 class AssetLoader extends Loader {
 

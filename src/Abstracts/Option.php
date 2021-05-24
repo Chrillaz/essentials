@@ -1,10 +1,10 @@
 <?php
 
-namespace Essentials\Abstracts;
+namespace Scaffold\Essentials\Abstracts;
 
-use Essentials\Essentials;
+use Scaffold\Essentials\Essentials;
 
-use Essentials\Contracts\OptionInterface;
+use Scaffold\Essentials\Contracts\OptionInterface;
 
 abstract class Option implements OptionInterface {
 
