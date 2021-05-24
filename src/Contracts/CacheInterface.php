@@ -1,6 +1,6 @@
 <?php
 
-namespace Scaffold\Contracts;
+namespace Scaffold\Essentials\Contracts;
 
 interface CacheInterface {
   
