@@ -24,7 +24,7 @@ class HookLoader extends Loader {
 
   public function load (): void {
 
-    if ( $actions = $this->queue->get( 'actions' ) ) {
+    if ( $actions = $this->get( 'actions' ) ) {
 
       array_map( function ( $hook ) {
         
@@ -34,7 +34,7 @@ class HookLoader extends Loader {
       }, $actions );
     }
 
-    if ( $filters = $this->queue->get( 'filters' ) ) {
+    if ( $filters = $this->get( 'filters' ) ) {
 
       array_map( function ( $hook ) {
   

@@ -23,6 +23,11 @@ abstract class Loader implements LoaderInterface {
     $this->container = $container;
   }
 
+  protected function get ( string $key ) {
+
+    return $this->queue->get( $key, $this->group );
+  }
+
   protected function add ( string $queue, $value ): void {
 
     if ( ! $this->queue->get( $queue, $this->group ) ) {
@@ -31,7 +36,7 @@ abstract class Loader implements LoaderInterface {
     }
 
     $queued = $this->queue->get( $queue, $this->group );
-var_dump('<pre>', $queued, '</pre>');
+
     array_push( $queued, $value );
 
     $this->queue->set( $queue, $queued, $this->group );

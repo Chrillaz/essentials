@@ -49,6 +49,6 @@ class AssetLoader extends Loader {
     array_map( function ( $asset ) {
 
       unset( $asset );
-    }, $this->queue->get( 'assets' ) );
+    }, $this->get( 'assets' ) );
   } 
 }
