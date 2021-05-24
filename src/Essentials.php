@@ -28,9 +28,9 @@ class Essentials extends Container {
 
     $this->registerConfig();
 
-    $this->bindReusableModules();
-
     $this->bindModules();
+    
+    $this->bindReusableModules();
   }
 
   public function registerConfig () {
