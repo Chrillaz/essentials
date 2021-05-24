@@ -17,7 +17,7 @@ abstract class Loader implements LoaderInterface {
   protected $group = 'loadergroup';
 
   public function __construct ( CacheInterface $cache, Essentials $container ) {
-
+var_dump('<pre>', $cache, '</pre>');
     $this->queue = $cache;
 
     $this->container = $container;
