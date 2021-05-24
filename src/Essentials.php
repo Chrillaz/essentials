@@ -47,11 +47,6 @@ class Essentials extends Container {
 
       return $this;
     });
-
-    // Util::directoryIterator( __DIR__ . '/Services', function ( $service ) {
-        
-    //   $this->singleton( $service->qualifiedname );
-    // });
   }
 
   private function bindModules () {
