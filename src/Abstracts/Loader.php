@@ -29,7 +29,7 @@ abstract class Loader implements LoaderInterface {
   }
 
   protected function add ( string $queue, $value ): void {
-
+var_dump('<pre>', $value, '</pre>');
     if ( ! $this->queue->get( $queue, $this->group ) ) {
 
       $this->queue->set( $queue, [], $this->group );
