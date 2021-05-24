@@ -48,10 +48,10 @@ class Essentials extends Container {
       return $this;
     });
 
-    Util::directoryIterator( __DIR__ . '/Services', function ( $service ) {
+    // Util::directoryIterator( __DIR__ . '/Services', function ( $service ) {
         
-      $this->singleton( $service->qualifiedname );
-    });
+    //   $this->singleton( $service->qualifiedname );
+    // });
   }
 
   private function bindModules () {

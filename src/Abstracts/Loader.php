@@ -31,7 +31,7 @@ abstract class Loader implements LoaderInterface {
     }
 
     $queued = $this->queue->get( $queue, $this->group );
-
+var_dump('<pre>', $queued, '</pre>');
     array_push( $queued, $value );
 
     $this->queue->set( $queue, $queued, $this->group );
