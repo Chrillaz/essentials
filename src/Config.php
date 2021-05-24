@@ -6,7 +6,8 @@ return [
   'bindings' => [
     \WP_Scripts::class => function () { return \wp_scripts(); },
     \WP_Styles::class => function () { return \wp_styles(); },
-    \Essentials\Contracts\StorageInterface::class => \Essentials\Resources\Storage::class,
-    \Essentials\Contracts\AssetInterface::class => \Essentials\Resources\Asset::class
+    \WP_Object_Cache::class => function () { global $wp_object_cache; return $wp_object_cache; },
+    \Scaffold\Essentials\Contracts\StorageInterface::class => \Scaffold\Essentials\Resources\Storage::class,
+    \Scaffold\Essentials\Contracts\AssetInterface::class => \Scaffold\Essentials\Resources\Asset::class
   ]
 ];
