@@ -2,18 +2,12 @@
   "name": "chrillaz/scaffold-essentials",
   "description": "wordpress essentials, a set of abstractions to work on WP Scaffold Theme",
   "type": "package",
-  "license": "MIT",
   "homepage": "https://github.com/Chrillaz/scaffold-essentials",
+  "license": "MIT",
   "authors": [
     {
       "name": "Christoffer Öhman",
       "email": "totalchriz@gmail.com"
-    }
-  ],
-  "repositories": [
-    {
-      "type": "composer",
-      "url": "https://wpackagist.org"
     }
   ],
   "autoload": {

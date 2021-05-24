@@ -2,7 +2,8 @@
 node_modules
 .env
 /vendor
-composer-lock.json
+composer.lock
+
 # Log files
 npm-debug.log*
 

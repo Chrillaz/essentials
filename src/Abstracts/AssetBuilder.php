@@ -1,8 +1,8 @@
 <?php
 
-namespace Essentials\Abstracts;
+namespace Scaffold\Essentials\Abstracts;
 
-use Essentials\Contracts\AssetBuilderInterface;
+use Scaffold\Essentials\Contracts\AssetBuilderInterface;
 
 abstract class AssetBuilder implements AssetBuilderInterface {
 

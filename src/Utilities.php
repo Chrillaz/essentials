@@ -1,46 +1,55 @@
 <?php
 
-namespace Essentials;
+namespace Scaffold\Essentials;
 
 class Utilities {
 
-  public static function directoryIterator ( string $namespace, string $path, \Closure $callback ) {
+  public static function directoryIterator ( string $path, \Closure $callback ) {
+
+    $paths = [];
 
     $filter = new \RecursiveCallbackFilterIterator( 
       new \RecursiveDirectoryIterator( $path ), 
       function ( $current, $key, $iterator ) {
-
-        return ( pathinfo( $name = $current->getFileName(), PATHINFO_EXTENSION ) && $name[0] !== '.' );
+        
+        return ( pathinfo( $name = $current->getFileName(), PATHINFO_EXTENSION ) === 'php' && $name[0] !== '.' );
       }
     );
 
-    foreach ( new \RecursiveIteratorIterator( $filter ) as $info) {
+    foreach ( new \RecursiveIteratorIterator( $filter ) as $info ) {
 
       $name = $info->getBasename( '.php' );
 
-      $parts = explode( 'src/', $path = $info->getPath() );
+      $path = $info->getPath();
+      
+      if ( empty( $paths ) || ! \array_key_exists( $path, $paths ) ) {
 
-      if ( false !== strpos( $namespace, end( $parts ) ) ) {
-
-        $namespace = $namespace;
-      } else {
-
-        $namespace = $namespace . '\\' . end( $parts );
+        $paths[$path] = self::getNamespace( $path . '/' . $info->getBasename() );
       }
 
-      $qualifiedname = $namespace . '\\' . $name . ''::class;
+      $namespace = $paths[$path];
 
       $callback( (object) [
         'name' => $name,
         'path' => $path,
         'namespace' => $namespace,
-        'qualifiedname' => $qualifiedname
+        'qualifiedname' => $namespace . '\\' . $name
       ]);
     }
   }
 
-  public static function dirExists ( string $path ) {
+  public static function getNamespace ( string $src ) {
+    
+    $src = file_get_contents( $src );
 
+    if ( preg_match( '#(namespace)(\\s+)([A-Za-z0-9\\\\]+?)(\\s*);#sm', $src, $matches ) ) {
+
+      return $matches[3];
+    }
+  }
+
+  public static function dirExists ( string $path ) {
+    
     return ( \realpath( $path ) !== false && is_dir( $path ) );
   }
 }

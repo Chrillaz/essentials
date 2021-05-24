@@ -1,6 +1,6 @@
 <?php
 
-namespace Essentials\Contracts;
+namespace Scaffold\Essentials\Contracts;
 
 interface OptionInterface {
 

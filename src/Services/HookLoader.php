@@ -1,10 +1,10 @@
 <?php
 
-namespace Essentials\Services;
+namespace Scaffold\Essentials\Services;
 
-use Essentials\Resources\Hook;
+use Scaffold\Essentials\Resources\Hook;
 
-use Essentials\Abstracts\Loader;
+use Scaffold\Essentials\Abstracts\Loader;
 
 class HookLoader extends Loader {
 

@@ -1,10 +1,10 @@
 <?php
 
-namespace Essentials\Resources;
+namespace Scaffold\Essentials\Resources;
 
-use Essentials\Contracts\AssetInterface;
+use Scaffold\Essentials\Contracts\AssetInterface;
 
-use Essentials\Abstracts\AssetBuilder;
+use Scaffold\Essentials\Abstracts\AssetBuilder;
 
 final class Script extends AssetBuilder {
 

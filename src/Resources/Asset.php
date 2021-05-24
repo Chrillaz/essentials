@@ -1,10 +1,12 @@
 <?php
 
-namespace Essentials\Resources;
+namespace Scaffold\Essentials\Resources;
 
-use Essentials\Contracts\StorageInterface;
+use Scaffold\Essentials\Essentials;
 
-use Essentials\Contracts\AssetInterface;
+use Scaffold\Essentials\Contracts\StorageInterface;
+
+use Scaffold\Essentials\Contracts\AssetInterface;
 
 class Asset implements AssetInterface {
 
@@ -26,7 +28,7 @@ class Asset implements AssetInterface {
       
       $this->version = filemtime( $container->getBasepath( '/assets' . $file ) );
       
-      $this->file = $container->getBaseuri( '/assets' . $file );
+      $this->file = $container->getPublicpath( '/assets' . $file );
     }
   }
 
