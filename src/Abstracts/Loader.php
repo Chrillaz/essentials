@@ -30,9 +30,17 @@ abstract class Loader implements LoaderInterface {
 
   protected function add ( string $queue, $value ): void {
 
+    if ( ! $this->queue->get( $queue, $this->group ) ) {
+
+      $this->queue->set( $queue, array($value), $this->group );
+    }
+
     $queued = $this->queue->get( $queue, $this->group );
 
-    array_push( $queued, $value );
+    if ( ! in_array( $value, $queued ) ) {
+
+      array_push( $queued, $value );
+    }
 
     $this->queue->set( $queue, $queued, $this->group );
   }
