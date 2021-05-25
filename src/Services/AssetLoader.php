@@ -3,7 +3,6 @@
 namespace Scaffold\Essentials\Services;
 
 use Scaffold\Essentials\Resources\{
-  Asset,
   Style,
   Script
 };
@@ -14,7 +13,7 @@ class AssetLoader extends Loader {
 
   public function addScript ( string $handle, string $file = '' ) {
 
-    $asset = $this->container->makeWith( Asset::class, [
+    $asset = $this->container->makeWith( \Scaffold\Essentials\Contracts\AssetInterface::class, [
       'handle' => $handle,
       'file'   => $file
     ]);
@@ -30,7 +29,7 @@ class AssetLoader extends Loader {
 
   public function addStyle ( string $handle, string $file = '' ) {
 
-    $asset = $this->container->makeWith( Asset::class, [
+    $asset = $this->container->makeWith( \Scaffold\Essentials\Contracts\AssetInterface::class, [
       'handle' => $handle,
       'file'   => $file
     ]);
