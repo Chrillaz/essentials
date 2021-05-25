@@ -51,6 +51,6 @@ class AssetLoader extends Loader {
       unset( $asset );
     }, $this->get( 'assets' ) );
 
-    $this->reset( 'assets' );
+    $this->clear( 'assets' );
   } 
 }

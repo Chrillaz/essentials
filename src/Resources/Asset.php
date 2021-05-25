@@ -18,8 +18,6 @@ class Asset implements AssetInterface {
 
   private $file;
 
-  private $group = 'assetgroup';
-
   public function __construct ( CacheInterface $data, Essentials $container, $handle, $file ) {
 
     $this->data = $data;
@@ -43,7 +41,7 @@ class Asset implements AssetInterface {
 
     if ( is_null( $this->version ) ) {
 
-      if ( ! is_null( $external = $this->data->get( 'external', $this->group ) ) ) {
+      if ( ! is_null( $external = $this->data->get( 'external', $this->handle ) ) ) {
 
         preg_match( "/(?)\s*((?:[0-9]+\.?)+)/i", $external, $matches );
 
@@ -59,7 +57,7 @@ class Asset implements AssetInterface {
 
   public function getFile (): string {
 
-    if ( is_null( $this->file ) && ! is_null( $external = $this->data->get( 'external', $this->group ) ) ) {
+    if ( is_null( $this->file ) && ! is_null( $external = $this->data->get( 'external', $this->handle ) ) ) {
 
       return $external;
     }
@@ -69,11 +67,11 @@ class Asset implements AssetInterface {
 
   public function getData ( string $name ) {
 
-    return $this->data->get( $name, $this->group );
+    return $this->data->get( $name, $this->handle );
   }
 
   public function append ( string $key, $value ): void {
         
-    $this->data->set( $key, $value, $this->group );  
+    $this->data->set( $key, $value, $this->handle );  
   }
 }

@@ -45,7 +45,7 @@ abstract class Loader implements LoaderInterface {
     $this->queue->set( $queue, $queued, $this->group );
   }
 
-  protected function reset ( ...$queues ) {
+  protected function clear ( ...$queues ) {
 
     foreach ( $queues as $queue ) {
 

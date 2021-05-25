@@ -44,6 +44,6 @@ class HookLoader extends Loader {
       }, $filters );
     }
 
-    $this->reset( 'actions', 'filters' );
+    $this->clear( 'actions', 'filters' );
   }
 }
