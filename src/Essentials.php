@@ -28,9 +28,9 @@ class Essentials extends Container {
 
     $this->registerConfig();
 
-    $this->bindReusableModules();
-
     $this->bindModules();
+    
+    $this->bindReusableModules();
   }
 
   public function registerConfig () {
@@ -46,11 +46,6 @@ class Essentials extends Container {
     $this->singleton( Essentials::class, function ( $container ) {
 
       return $this;
-    });
-
-    Util::directoryIterator( __DIR__ . '/Services', function ( $service ) {
-        
-      $this->singleton( $service->qualifiedname );
     });
   }
 

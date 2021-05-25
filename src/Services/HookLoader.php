@@ -2,29 +2,27 @@
 
 namespace Scaffold\Essentials\Services;
 
-use Scaffold\Essentials\Resources\Hook;
-
 use Scaffold\Essentials\Abstracts\Loader;
 
 class HookLoader extends Loader {
 
   public function addAction ( ...$args ): void {
     
-    $this->add( 'actions', $this->container->make( hook::class, [
+    $this->add( 'actions', $this->container->make( \Scaffold\Essentials\Contracts\HookInterface::class, [
       'args' => $args 
     ]));
   }
 
   public function addFilter ( ...$args ): void {
 
-    $this->add( 'filters', $this->container->make( hook::class, [
+    $this->add( 'filters', $this->container->make( \Scaffold\Essentials\Contracts\HookInterface::class, [
       'args' => $args 
     ]));
   }
 
   public function load (): void {
 
-    if ( $actions = $this->queue->get( 'actions' ) ) {
+    if ( $actions = $this->get( 'actions' ) ) {
 
       array_map( function ( $hook ) {
         
@@ -34,7 +32,7 @@ class HookLoader extends Loader {
       }, $actions );
     }
 
-    if ( $filters = $this->queue->get( 'filters' ) ) {
+    if ( $filters = $this->get( 'filters' ) ) {
 
       array_map( function ( $hook ) {
   
@@ -44,6 +42,6 @@ class HookLoader extends Loader {
       }, $filters );
     }
 
-    $this->reset();
+    $this->clear( 'actions', 'filters' );
   }
 }
