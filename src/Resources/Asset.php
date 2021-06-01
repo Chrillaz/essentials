@@ -49,6 +49,8 @@ class Asset implements AssetInterface {
 
           return $matches[1];
         }
+
+        return substr( md5( openssl_random_pseudo_bytes( 20 ) ), -8 );
       }
     }
 
