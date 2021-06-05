@@ -26,9 +26,9 @@ class Asset implements AssetInterface {
 
     if ( ! empty( $file ) ) {
       
-      $this->version = filemtime( $container->getBasepath( '/assets' . $file ) );
+      $this->version = filemtime( $container->getBasepath( $container->getPublicdir() . $file ) );
       
-      $this->file = $container->getPublicpath( '/assets' . $file );
+      $this->file = $container->getPublicpath( $container->getPublicdir() . $file );
     }
   }
 

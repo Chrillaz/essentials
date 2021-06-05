@@ -16,6 +16,8 @@ class Essentials extends Container {
 
   protected $publicpath;
 
+  protected $publicdir;
+
   public function __construct ( array $args ) {
     
     extract( $args );
@@ -23,6 +25,8 @@ class Essentials extends Container {
     $this->basepath = isset( $basepath ) ? $basepath : '';
 
     $this->publicpath = isset( $publicpath ) ? $publicpath : '';
+
+    $this->publicdir = isset( $publicdir ) ? $publicdir : '';
 
     $this->getNamespace();
 
@@ -104,6 +108,11 @@ class Essentials extends Container {
   public function getPublicpath ( string $relpath = null ) {
 
     return is_null( $relpath ) ? $this->publicpath : $this->publicpath . $relpath;
+  }
+
+  public function getPublicdir () {
+
+    return $this->publicdir;
   }
 
   public function getNamespace () {
