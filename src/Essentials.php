@@ -35,6 +35,8 @@ class Essentials extends Container {
     $this->bindModules();
     
     $this->bindReusableModules();
+
+    $this->registerEssentialHooks();
   }
 
   public function registerConfig () {
@@ -98,6 +100,16 @@ class Essentials extends Container {
     }
     
     return $this->config = $config;
+  }
+
+  public function registerEssentialHooks () {
+
+    Util::directoryIterator( __DIR__ . '/Hooks', function ( $hook ) {
+
+      $hook = $this->make( $hook->qualifiedname );
+
+      $hook->register();
+    });
   }
 
   public function getBasepath ( string $relpath = null ) {
