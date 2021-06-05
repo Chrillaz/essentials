@@ -37,6 +37,11 @@ final class Style extends AssetBuilder {
       $this->queue->add_inline_style( $this->asset->getHandle(), $inline, $this->asset->getData( 'position' ) );
     }
 
+    if ( ( $exec = $this->asset->getData( 'load' ) ) && isset( $this->queue->registered[$this->asset->getHandle()] ) ) {
+      
+      $this->queue->add_data( $this->asset->getHandle(), 'script_execution', $exec );
+    }
+
     $this->queue->enqueue( $this->asset->getHandle() );
   }
 }

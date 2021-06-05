@@ -49,7 +49,7 @@ abstract class AssetBuilder implements AssetBuilderInterface {
 
     $name = trim( $name );
 
-    if ( in_array( $name, ['defer', 'async'] ) ) {
+    if ( in_array( $name, ['defer', 'async', 'critical'] ) ) {
 
       $this->asset->append( 'load', $name );
     }
