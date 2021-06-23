@@ -15,7 +15,18 @@
       "Scaffold\\Essentials\\": "src/"
     }
   },
+  "config": {
+    "sort-packages": true
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-main": "1.x-dev"
+    }
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": false,
   "require": {
+    "php": "^7.3",
     "illuminate/container": "^8.37"
   }
 }
