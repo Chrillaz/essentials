@@ -27,7 +27,8 @@ final class Script extends AssetBuilder {
         $this->asset->getHandle(), 
         $this->asset->getFile(), 
         $this->asset->getData( 'dependencies' ), 
-        $this->asset->getVersion() 
+        $this->asset->getVersion() ,
+        ( ! $this->asset->getData( 'context' ) ? false : true )
       );
 
       if ( ! $this->asset->getData( 'context' ) ) {
