@@ -3,55 +3,55 @@
 namespace Scaffold\Essentials\Abstracts;
 
 use Scaffold\Essentials\Essentials;
-
 use Scaffold\Essentials\Contracts\CacheInterface;
-
 use Scaffold\Essentials\Contracts\LoaderInterface;
 
-abstract class Loader implements LoaderInterface {
+abstract class Loader implements LoaderInterface
+{
 
-  protected $queue;
-  
-  protected $container;
+    protected $queue;
 
-  protected $group = 'loadergroup';
+    protected $container;
 
-  public function __construct ( CacheInterface $cache, Essentials $container ) {
+    protected $group = 'loadergroup';
 
-    $this->queue = $cache;
+    public function __construct(CacheInterface $cache, Essentials $container)
+    {
 
-    $this->container = $container;
-  }
+        $this->queue = $cache;
 
-  protected function get ( string $key ) {
-
-    return $this->queue->get( $key, $this->group );
-  }
-
-  protected function add ( string $queue, $value ): void {
-
-    if ( ! $this->queue->get( $queue, $this->group ) ) {
-
-      $this->queue->set( $queue, array($value), $this->group );
+        $this->container = $container;
     }
 
-    $queued = $this->queue->get( $queue, $this->group );
+    protected function get(string $key)
+    {
 
-    if ( ! in_array( $value, $queued ) ) {
-
-      array_push( $queued, $value );
+        return $this->queue->get($key, $this->group);
     }
 
-    $this->queue->set( $queue, $queued, $this->group );
-  }
+    protected function add(string $queue, $value): void
+    {
 
-  protected function clear ( ...$queues ) {
+        if (! $this->queue->get($queue, $this->group)) {
+            $this->queue->set($queue, array($value), $this->group);
+        }
 
-    foreach ( $queues as $queue ) {
+        $queued = $this->queue->get($queue, $this->group);
 
-      $this->queue->delete( $queue, $this->group );
+        if (! in_array($value, $queued)) {
+            array_push($queued, $value);
+        }
+
+        $this->queue->set($queue, $queued, $this->group);
     }
-  }
 
-  abstract public function load (): void;
+    protected function clear(...$queues)
+    {
+
+        foreach ($queues as $queue) {
+            $this->queue->delete($queue, $this->group);
+        }
+    }
+
+    abstract public function load(): void;
 }

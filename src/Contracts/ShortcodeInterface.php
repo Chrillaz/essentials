@@ -2,7 +2,8 @@
 
 namespace Scaffold\Essentials\Contracts;
 
-interface ShortcodeInterface {
+interface ShortcodeInterface
+{
 
-  public function register ( array $attributes ): string;
+    public function register(array $attributes): string;
 }

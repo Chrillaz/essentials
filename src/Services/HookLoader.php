@@ -4,44 +4,44 @@ namespace Scaffold\Essentials\Services;
 
 use Scaffold\Essentials\Abstracts\Loader;
 
-class HookLoader extends Loader {
+class HookLoader extends Loader
+{
 
-  public function addAction ( ...$args ): void {
-    
-    $this->add( 'actions', $this->container->make( \Scaffold\Essentials\Contracts\HookInterface::class, [
-      'args' => $args 
-    ]));
-  }
+    public function addAction(...$args): void
+    {
 
-  public function addFilter ( ...$args ): void {
+        $args = [ 'type' => 'action' ] + $args;
 
-    $this->add( 'filters', $this->container->make( \Scaffold\Essentials\Contracts\HookInterface::class, [
-      'args' => $args 
-    ]));
-  }
-
-  public function load (): void {
-
-    if ( $actions = $this->get( 'actions' ) ) {
-
-      array_map( function ( $hook ) {
-        
-        \add_action( $hook->getAction(), $hook->getCallback(), $hook->getPriority(), $hook->getNumArgs() );
-  
-        unset( $hook );
-      }, $actions );
+        $this->add('actions', $this->container->make(\Scaffold\Essentials\Contracts\HookInterface::class, [
+            'args' => $args
+        ]));
     }
 
-    if ( $filters = $this->get( 'filters' ) ) {
+    public function addFilter(...$args): void
+    {
 
-      array_map( function ( $hook ) {
-  
-        \add_filter( $hook->getAction(), $hook->getCallback(), $hook->getPriority(), $hook->getNumArgs() );
-  
-        unset( $hook );
-      }, $filters );
+        $args = [ 'type' => 'filter' ] + $args;
+
+        $this->add('filters', $this->container->make(\Scaffold\Essentials\Contracts\HookInterface::class, [
+            'args' => $args
+        ]));
     }
 
-    $this->clear( 'actions', 'filters' );
-  }
+    public function load(): void
+    {
+
+        array_map(function ($hook) {
+
+            'action' === $hook->getType()
+            ? \add_action($hook->getAction(), $hook->getCallback(), $hook->getPriority(), $hook->getNumArgs())
+            : \add_filter($hook->getAction(), $hook->getCallback(), $hook->getPriority(), $hook->getNumArgs());
+
+            unset($hook);
+        }, array_merge(
+            ( $this->get('actions') ? $this->get('actions') : [] ),
+            ( $this->get('filters') ? $this->get('filters') : [] )
+        ));
+
+        $this->clear('actions', 'filters');
+    }
 }

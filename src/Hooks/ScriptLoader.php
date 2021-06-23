@@ -3,89 +3,102 @@
 namespace Scaffold\Essentials\Hooks;
 
 use Scaffold\Essentials\Abstracts\Hooks;
-
 use Scaffold\Essentials\Services\HookLoader;
 
-final class ScriptLoader extends Hooks {
+final class ScriptLoader extends Hooks
+{
 
-  protected $hooks;
+    protected $hooks;
 
-  protected $scripts;
+    protected $scripts;
 
-  protected $styles;
+    protected $styles;
 
-  protected $addInline = [];
+    protected $critical = [];
 
-  public function __construct ( HookLoader $hooks, \WP_Scripts $scripts, \WP_Styles $styles ) {
+    public function __construct(HookLoader $hooks, \WP_Scripts $scripts, \WP_Styles $styles)
+    {
 
-    $this->hooks = $hooks;
+        $this->hooks = $hooks;
 
-    $this->scripts = $scripts;
+        $this->scripts = $scripts;
 
-    $this->styles = $styles;
-  }
-
-  protected function executionType ( string $handle, string $type, $queue ) {
-
-    $execute = $queue->get_data( $handle, $type );
-
-    if ( ! $execute ) return $execute;
-
-    foreach ( $queue->registered as $asset ) {
-
-      if ( in_array( $handle, $asset->deps, true ) ) return false;
+        $this->styles = $styles;
     }
 
-    return $execute;
-  }
+    protected function executionType(string $handle, string $type, $queue)
+    {
 
-  public function executeCritical () {
-    
-    foreach ( $this->addInline as $path ) {
+        $execute = $queue->get_data($handle, $type);
 
-      echo '<style type="text/css">' . \file_get_contents( $path ) . '</style>';
-    }
-  }
+        if (! $execute) {
+            return $execute;
+        }
 
-  public function scriptExecution ( string $tag, string $handle ) {
+        foreach ($queue->registered as $asset) {
+            if (in_array($handle, $asset->deps, true)) {
+                return false;
+            }
+        }
 
-    if ( ! $exec = $this->executionType( $handle, 'script_execution', $this->scripts ) ) return $tag;
-      
-    if ( ! preg_match( ":\s$exec(=|>|\s):", $tag ) ) {
-  
-      $tag = preg_replace( ':(?=></script>):', " $exec", $tag, 1 );
-    }
-  
-    return $tag;
-  }
-
-  public function styleExecution ( string $tag, string $handle, string $src ) {
-
-    if ( ! $exec = $this->executionType( $handle, 'script_execution', $this->styles ) ) return $tag;
-  
-    if ( 'critical' === $exec ) {
-
-      $src = explode( '?', $src );
-
-      $this->addInline[] = ABSPATH . parse_url( $src[0] )['path'];
-
-      return;
+        return $execute;
     }
 
-    return sprintf('
-      <link id="' . $handle . '" rel="preload" href="' . $src . '" as="style" onload="this.onload=null;this.rel=\'stylesheet\'">
-      <noscript>' . $tag . '</noscript>'
-    );
-  }
+    public function criticalExecution()
+    {
 
-  public function register (): void {
+        foreach ($this->critical as $path) {
+            echo '<style type="text/css">' . \file_get_contents($path) . '</style>';
+        }
+    }
 
-    $this->hooks->addFilter( 'script_loader_tag', 'scriptExecution', $this, 10, 2 );
+    public function scriptExecution(string $tag, string $handle)
+    {
 
-    $this->hooks->addFilter( 'style_loader_tag', 'styleExecution', $this, 10, 3 );
+        if (! $exec = $this->executionType($handle, 'script_execution', $this->scripts)) {
+            return $tag;
+        }
 
-    $this->hooks->addAction( 'wp_head', 'executeCritical', $this );
+        if (! preg_match(":\s$exec(=|>|\s):", $tag)) {
+            $tag = preg_replace(':(?=></script>):', " $exec", $tag, 1);
+        }
 
-    $this->hooks->load();
-  }
+        return $tag;
+    }
+
+    public function styleExecution(string $tag, string $handle, string $src)
+    {
+
+        if (! $exec = $this->executionType($handle, 'script_execution', $this->styles)) {
+            return $tag;
+        }
+
+        if ('critical' === $exec) {
+            $src = explode('?', $src);
+
+            $this->critical[] = ABSPATH . parse_url($src[0])['path'];
+
+            return;
+        }
+
+        return sprintf(
+            '<link id="%s" rel="preload" href="%s" as="style" onload="this.onload=null;this.rel=\'stylesheet\'">
+            <noscript>%s</noscript>',
+            $handle,
+            $src,
+            $tag
+        );
+    }
+
+    public function register(): void
+    {
+
+        $this->hooks->addFilter('script_loader_tag', 'scriptExecution', $this, 10, 2);
+
+        $this->hooks->addFilter('style_loader_tag', 'styleExecution', $this, 10, 3);
+
+        $this->hooks->addAction('wp_head', 'criticalExecution', $this);
+
+        $this->hooks->load();
+    }
 }

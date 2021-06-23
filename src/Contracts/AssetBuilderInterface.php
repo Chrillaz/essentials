@@ -2,9 +2,10 @@
 
 namespace Scaffold\Essentials\Contracts;
 
-interface AssetBuilderInterface {
+interface AssetBuilderInterface
+{
 
-  public function dequeue (): void;
-  
-  public function enqueue (): void;
+    public function dequeue(): void;
+
+    public function enqueue(): void;
 }

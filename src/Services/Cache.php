@@ -4,62 +4,66 @@ namespace Scaffold\Essentials\Services;
 
 use Scaffold\Essentials\Contracts\CacheInterface;
 
-class Cache implements CacheInterface {
+class Cache implements CacheInterface
+{
 
-  protected $cache;
+    protected $cache;
 
-  public function __construct( \WP_Object_Cache $cache ) {
+    public function __construct(\WP_Object_Cache $cache)
+    {
 
-    $this->cache = $cache;
-  }
-
-  public function get ( string $key, string $group = 'default' ) {
-
-    if ( $cache = $this->cache->get( $key, $group ) ) {
-
-      return $cache;
+        $this->cache = $cache;
     }
 
-    if ( 'persistent' === $group && $transient = \get_transient( $key ) ) {
+    public function get(string $key, string $group = 'default')
+    {
 
-      return $transient;
+        if ($cache = $this->cache->get($key, $group)) {
+            return $cache;
+        }
+
+        if ('persistent' === $group && $transient = \get_transient($key)) {
+            return $transient;
+        }
+
+        return false;
     }
 
-    return false;
-  }
+    public function collect(array $keys, string $group = 'default')
+    {
 
-  public function collect ( array $keys, string $group = 'default' ) {
-
-    return $this->cache->get_multiple( $keys, $group );
-  }
-
-  public function set ( string $key, $value, string $group = 'default' ): bool {
-
-    return $this->cache->set( $key, $value, $group );
-  }
-
-  public function delete ( string $key, string $group = 'default' ): bool {
-
-    if ( $cache = $this->cache->delete( $key ) ) {
-
-      return $cache;
+        return $this->cache->get_multiple($keys, $group);
     }
 
-    if ( 'persistent' === $group && $transient = \delete_transient( $key ) ) {
+    public function set(string $key, $value, string $group = 'default'): bool
+    {
 
-      return $transient;
+        return $this->cache->set($key, $value, $group);
     }
 
-    return false;
-  }
+    public function delete(string $key, string $group = 'default'): bool
+    {
 
-  public function flush () {
+        if ($cache = $this->cache->delete($key)) {
+            return $cache;
+        }
 
-    $this->cache->flush();
-  }
+        if ('persistent' === $group && $transient = \delete_transient($key)) {
+            return $transient;
+        }
 
-  public function persist ( string $key, $value, $exp = DAY_IN_SECONDS ): bool {
+        return false;
+    }
 
-    return \set_transient( $key, $value, $exp );
-  }
+    public function flush()
+    {
+
+        $this->cache->flush();
+    }
+
+    public function persist(string $key, $value, $exp = DAY_IN_SECONDS): bool
+    {
+
+        return \set_transient($key, $value, $exp);
+    }
 }

@@ -3,153 +3,147 @@
 namespace Scaffold\Essentials;
 
 use Scaffold\Essentials\Utilities as Util;
+use Illuminate\Container\Container;
 
-use \Illuminate\Container\Container;
+class Essentials extends Container
+{
 
-class Essentials extends Container {
+    protected $config;
 
-  protected $config;
+    protected $namespace;
 
-  protected $namespace;
-  
-  protected $basepath;
+    protected $basepath;
 
-  protected $publicpath;
+    protected $publicpath;
 
-  protected $publicdir;
+    protected $publicdir;
 
-  public function __construct ( array $args ) {
-    
-    extract( $args );
+    public function __construct(array $args)
+    {
 
-    $this->basepath = isset( $basepath ) ? $basepath : '';
+        extract($args);
 
-    $this->publicpath = isset( $publicpath ) ? $publicpath : '';
+        $this->basepath = isset($basepath) ? $basepath : '';
 
-    $this->publicdir = isset( $publicdir ) ? $publicdir : '';
+        $this->publicpath = isset($publicpath) ? $publicpath : '';
 
-    $this->getNamespace();
+        $this->publicdir = isset($publicdir) ? $publicdir : '';
 
-    $this->registerConfig();
+        $this->getNamespace();
 
-    $this->bindModules();
-    
-    $this->bindReusableModules();
+        $this->registerConfig();
 
-    $this->registerEssentialHooks();
-  }
+        $this->bindModules();
 
-  public function registerConfig () {
+        $this->bindReusableModules();
 
-    foreach ( $this->getConfig() as $key => $config ) {
-
-      $key !== 'bindings' ? $this->instance( $key, $config ) : null;
+        $this->registerEssentialHooks();
     }
-  }
 
-  private function bindReusableModules () {
+    private function registerConfig()
+    {
 
-    $this->singleton( Essentials::class, function ( $container ) {
+        foreach ($this->getConfig() as $key => $config) {
+            $key !== 'bindings' ? $this->instance($key, $config) : null;
+        }
+    }
 
-      return $this;
-    });
-  }
+    private function bindReusableModules()
+    {
 
-  private function bindModules () {
+        $this->singleton(Essentials::class, function ($container) {
 
-    foreach ( $this->getConfig()['bindings'] as $interface => $implementation ) {
-
-      if ( $implementation instanceof \Closure ) {
-
-        $this->bind( $interface, function ( $container ) use ( $implementation ) {
-
-          return $implementation();
+            return $this;
         });
-      }
-
-      $this->bind( $interface, $implementation );
-    }
-  }
-
-  public function getConfig () {
-
-    if ( ! is_null( $this->config ) ) {
-
-      return $this->config;
     }
 
-    $config = require __DIR__ . '/Config.php';
+    private function bindModules()
+    {
 
-    if ( \file_exists( $appconfig = $this->getBasepath( '/src/Config.php' ) ) ) {
+        foreach ($this->getConfig()['bindings'] as $interface => $implementation) {
+            if ($implementation instanceof \Closure) {
+                $this->bind($interface, function ($container) use ($implementation) {
 
-      $appconfig = require_once $appconfig;
+                    return $implementation();
+                });
+            }
 
-      foreach ( $appconfig as $key => $value ) {
-
-        if ( isset( $config[$key] ) ) {
-
-          $config[$key] = array_merge(
-            $config[$key],
-            $value
-          );
-        } else {
-
-          $config[$key] = $value;
+            $this->bind($interface, $implementation);
         }
-      }
-    }
-    
-    return $this->config = $config;
-  }
-
-  public function registerEssentialHooks () {
-
-    Util::directoryIterator( __DIR__ . '/Hooks', function ( $hook ) {
-
-      $hook = $this->make( $hook->qualifiedname );
-
-      $hook->register();
-    });
-  }
-
-  public function getBasepath ( string $relpath = null ) {
-
-    return is_null( $relpath ) ? $this->basepath : $this->basepath . $relpath;
-  }
-
-  public function getPublicpath ( string $relpath = null ) {
-
-    return is_null( $relpath ) ? $this->publicpath : $this->publicpath . $relpath;
-  }
-
-  public function getPublicdir () {
-
-    return $this->publicdir;
-  }
-
-  public function getNamespace () {
-
-    if ( ! is_null( $this->namespace ) ) {
-
-      return $this->namespace;
     }
 
-    $composer = \json_decode( \file_get_contents( $this->getBasepath( '/composer.json' ) ), true );
+    public function getConfig()
+    {
 
-    if ( isset( $composer['autoload'] ) && isset( $composer['autoload']['psr-4'] ) ) {
-      
-      foreach ( $composer['autoload']['psr-4'] as $namespace => $path ) {
-        
-        if ( 'src/' === strtolower( $path ) ) {
-
-          return $this->namespace = $namespace;
+        if (! is_null($this->config)) {
+            return $this->config;
         }
-      }
+
+        $config = require __DIR__ . '/Config.php';
+
+        if (\file_exists($appconfig = $this->getBasepath('/src/Config.php'))) {
+            $appconfig = require_once $appconfig;
+
+            foreach ($appconfig as $key => $value) {
+                $config[$key] = isset($config[$key])
+                ? array_merge($config[$key], $value)
+                : $value;
+            }
+        }
+
+        return $this->config = $config;
     }
-  }
 
-  public static function create ( ...$args ) {
+    public function registerEssentialHooks()
+    {
 
-    return new Self( ...$args );
-  }
+        Util::directoryIterator(__DIR__ . '/Hooks', function ($hook) {
+
+            $hook = $this->make($hook->qualifiedname);
+
+            $hook->register();
+        });
+    }
+
+    public function getBasepath(string $relpath = null)
+    {
+
+        return is_null($relpath) ? $this->basepath : $this->basepath . $relpath;
+    }
+
+    public function getPublicpath(string $relpath = null)
+    {
+
+        return is_null($relpath) ? $this->publicpath : $this->publicpath . $relpath;
+    }
+
+    public function getPublicdir()
+    {
+
+        return $this->publicdir;
+    }
+
+    public function getNamespace()
+    {
+
+        if (! is_null($this->namespace)) {
+            return $this->namespace;
+        }
+
+        $composer = \json_decode(\file_get_contents($this->getBasepath('/composer.json')), true);
+
+        if (isset($composer['autoload']) && isset($composer['autoload']['psr-4'])) {
+            foreach ($composer['autoload']['psr-4'] as $namespace => $path) {
+                if ('src/' === strtolower($path)) {
+                    return $this->namespace = $namespace;
+                }
+            }
+        }
+    }
+
+    public static function create(...$args)
+    {
+
+        return new self(...$args);
+    }
 }

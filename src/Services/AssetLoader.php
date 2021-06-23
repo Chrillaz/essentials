@@ -6,50 +6,53 @@ use Scaffold\Essentials\Resources\{
   Style,
   Script
 };
-
 use Scaffold\Essentials\Abstracts\Loader;
 
-class AssetLoader extends Loader {
+class AssetLoader extends Loader
+{
 
-  public function addScript ( string $handle, string $file = '' ) {
+    public function addScript(string $handle, string $file = '')
+    {
 
-    $asset = $this->container->makeWith( \Scaffold\Essentials\Contracts\AssetInterface::class, [
-      'handle' => $handle,
-      'file'   => $file
-    ]);
-      
-    $script = $this->container->makeWith( Script::class, [
-      'asset' => $asset
-    ]);
+        $asset = $this->container->makeWith(\Scaffold\Essentials\Contracts\AssetInterface::class, [
+            'handle' => $handle,
+            'file'   => $file
+        ]);
 
-    $this->add( 'assets', $script );
+        $script = $this->container->makeWith(Script::class, [
+            'asset' => $asset
+        ]);
 
-    return $script;
-  }
+        $this->add('assets', $script);
 
-  public function addStyle ( string $handle, string $file = '' ) {
+        return $script;
+    }
 
-    $asset = $this->container->makeWith( \Scaffold\Essentials\Contracts\AssetInterface::class, [
-      'handle' => $handle,
-      'file'   => $file
-    ]);
+    public function addStyle(string $handle, string $file = '')
+    {
 
-    $style = $this->container->makeWith( Style::class, [
-      'asset' => $asset
-    ]);
+        $asset = $this->container->makeWith(\Scaffold\Essentials\Contracts\AssetInterface::class, [
+            'handle' => $handle,
+            'file'   => $file
+        ]);
 
-    $this->add( 'assets', $style );
+        $style = $this->container->makeWith(Style::class, [
+            'asset' => $asset
+        ]);
 
-    return $style;
-  }
+        $this->add('assets', $style);
 
-  public function load (): void {
+        return $style;
+    }
 
-    array_map( function ( $asset ) {
+    public function load(): void
+    {
 
-      unset( $asset );
-    }, $this->get( 'assets' ) );
+        array_map(function ($asset) {
 
-    $this->clear( 'assets' );
-  } 
+            unset($asset);
+        }, $this->get('assets'));
+
+        $this->clear('assets');
+    }
 }

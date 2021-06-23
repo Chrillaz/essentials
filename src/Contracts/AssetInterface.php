@@ -2,15 +2,16 @@
 
 namespace Scaffold\Essentials\Contracts;
 
-interface AssetInterface {
+interface AssetInterface
+{
 
-  public function getHandle (): string;
+    public function getHandle(): string;
 
-  public function getVersion (): string;
+    public function getVersion(): string;
 
-  public function getFile (): string;
+    public function getFile(): string;
 
-  public function getData ( string $name );
+    public function getData(string $name);
 
-  public function append ( string $key, $value ): void;
+    public function append(string $key, $value): void;
 }

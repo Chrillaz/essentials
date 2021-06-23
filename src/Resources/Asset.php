@@ -3,77 +3,77 @@
 namespace Scaffold\Essentials\Resources;
 
 use Scaffold\Essentials\Essentials;
-
 use Scaffold\Essentials\Contracts\CacheInterface;
-
 use Scaffold\Essentials\Contracts\AssetInterface;
 
-class Asset implements AssetInterface {
+class Asset implements AssetInterface
+{
 
-  private $data;
+    private $cache;
 
-  private $handle;
+    private $handle;
 
-  private $version;
+    private $version;
 
-  private $file;
+    private $file;
 
-  public function __construct ( CacheInterface $data, Essentials $container, $handle, $file ) {
+    public function __construct(CacheInterface $cache, Essentials $container, $handle, $file)
+    {
 
-    $this->data = $data;
+        $this->cache = $cache;
 
-    $this->handle = $handle;
+        $this->handle = $handle;
 
-    if ( ! empty( $file ) ) {
-      
-      $this->version = filemtime( $container->getBasepath( $container->getPublicdir() . $file ) );
-      
-      $this->file = $container->getPublicpath( $container->getPublicdir() . $file );
+        if (! empty($file)) {
+            $this->version = filemtime($container->getBasepath($container->getPublicdir() . $file));
+
+            $this->file = $container->getPublicpath($container->getPublicdir() . $file);
+        }
     }
-  }
 
-  public function getHandle (): string {
+    public function getHandle(): string
+    {
 
-    return $this->handle;
-  }
+        return $this->handle;
+    }
 
-  public function getVersion (): string {
+    public function getVersion(): string
+    {
 
-    if ( is_null( $this->version ) ) {
+        if (is_null($this->version)) {
+            if (! is_null($external = $this->cache->get('external', $this->handle))) {
+                preg_match("/(?)\s*((?:[0-9]+\.?)+)/i", $external, $matches);
 
-      if ( ! is_null( $external = $this->data->get( 'external', $this->handle ) ) ) {
+                if (is_array($matches) && ! empty($matches)) {
+                    return $matches[1];
+                }
 
-        preg_match( "/(?)\s*((?:[0-9]+\.?)+)/i", $external, $matches );
-
-        if ( is_array( $matches ) && ! empty( $matches ) ) {
-
-          return $matches[1];
+                return substr(md5(openssl_random_pseudo_bytes(20)), -8);
+            }
         }
 
-        return substr( md5( openssl_random_pseudo_bytes( 20 ) ), -8 );
-      }
+        return $this->version;
     }
 
-    return $this->version;
-  }
+    public function getFile(): string
+    {
 
-  public function getFile (): string {
+        if (is_null($this->file) && ! is_null($external = $this->cache->get('external', $this->handle))) {
+            return $external;
+        }
 
-    if ( is_null( $this->file ) && ! is_null( $external = $this->data->get( 'external', $this->handle ) ) ) {
-
-      return $external;
+        return $this->file;
     }
 
-    return $this->file;
-  }
+    public function getData(string $name)
+    {
 
-  public function getData ( string $name ) {
+        return $this->cache->get($name, $this->handle);
+    }
 
-    return $this->data->get( $name, $this->handle );
-  }
+    public function append(string $key, $value): void
+    {
 
-  public function append ( string $key, $value ): void {
-        
-    $this->data->set( $key, $value, $this->handle );  
-  }
+        $this->cache->set($key, $value, $this->handle);
+    }
 }

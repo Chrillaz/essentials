@@ -3,21 +3,22 @@
 namespace Scaffold\Essentials\Abstracts;
 
 use Scaffold\Essentials\Essentials;
-
 use Scaffold\Essentials\Services\HookLoader;
 
-abstract class Hooks {
+abstract class Hooks
+{
 
-  protected $hooks;
+    protected $hooks;
 
-  protected $container;
+    protected $container;
 
-  public function __construct ( HookLoader $hooks, Essentials $container ) {
+    public function __construct(HookLoader $hooks, Essentials $container)
+    {
 
-    $this->hooks = $hooks;
+        $this->hooks = $hooks;
 
-    $this->container = $container;
-  }
+        $this->container = $container;
+    }
 
-  abstract public function register (): void;
+    abstract public function register(): void;
 }

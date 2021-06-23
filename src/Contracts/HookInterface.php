@@ -2,13 +2,16 @@
 
 namespace Scaffold\Essentials\Contracts;
 
-interface HookInterface {
+interface HookInterface
+{
 
-  public function getAction(): string;
+    public function getType(): string;
 
-  public function getCallback();
+    public function getAction(): string;
 
-  public function getPriority(): int;
+    public function getCallback();
 
-  public function getNumArgs(): int;
+    public function getPriority(): int;
+
+    public function getNumArgs(): int;
 }
