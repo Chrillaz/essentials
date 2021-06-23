@@ -17,10 +17,10 @@ final class Hook implements HookInterface
 
     protected $numargs;
 
-    public function __construct(array $args)
+    public function __construct(string $type, array $args)
     {
 
-        list ( $type, $event, $callback, $component, $priority, $numargs ) = array_pad($args, 5, null);
+        list ( $event, $callback, $component, $priority, $numargs ) = array_pad($args, 5, null);
 
         if ($event === '') {
             return $this;
