@@ -4,56 +4,72 @@ namespace Scaffold\Essentials\Resources;
 
 use Scaffold\Essentials\Contracts\HookInterface;
 
-final class Hook implements HookInterface {
+final class Hook implements HookInterface
+{
 
-  private $event;
+    protected $type;
 
-  private $callback;
+    protected $event;
 
-  private $priority;
+    protected $callback;
 
-  private $numargs;
+    protected $priority;
 
-  public function __construct ( array $args ) {
+    protected $numargs;
 
-    list ( $event, $callback, $component, $priority, $numargs ) = array_pad( $args, 5, null );
-    
-    if ( $event === '' ) return $this;
+    public function __construct(array $args)
+    {
 
-    $this->event = $event;
+        list ( $type, $event, $callback, $component, $priority, $numargs ) = array_pad($args, 5, null);
 
-    $this->callback = ( is_object( $component ) ? [$component, $callback] : $callback );
+        if ($event === '') {
+            return $this;
+        }
 
-    if ( is_int( $component ) ) {
+        $this->type = $type;
 
-      $this->priority = $component;
+        $this->event = $event;
 
-      $this->numargs = $priority;
-    } else {
+        $this->callback = ( is_object($component) ? [$component, $callback] : $callback );
 
-      $this->priority = ( $priority === null ? 10 : $priority );
-  
-      $this->numargs = ( $numargs === null ? 1 : $numargs );
+        if (is_int($component)) {
+            $this->priority = $component;
+
+            $this->numargs = $priority;
+        } else {
+            $this->priority = ( $priority === null ? 10 : $priority );
+
+            $this->numargs = ( $numargs === null ? 1 : $numargs );
+        }
     }
-  }
 
-  public function getAction (): string {
+    public function getType(): string
+    {
 
-    return $this->event;
-  }
+        return $this->type;
+    }
 
-  public function getCallback () {
+    public function getAction(): string
+    {
 
-    return $this->callback;
-  }
+        return $this->event;
+    }
 
-  public function getPriority (): int {
+    public function getCallback()
+    {
 
-    return $this->priority;
-  }
+        return $this->callback;
+    }
 
-  public function getNumArgs (): int {
+    public function getPriority(): int
+    {
 
-    return $this->numargs;
-  }
+        return $this->priority;
+    }
+
+    public function getNumArgs(): int
+    {
+
+        return $this->numargs;
+    }
 }

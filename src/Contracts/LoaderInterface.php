@@ -2,7 +2,8 @@
 
 namespace Scaffold\Essentials\Contracts;
 
-interface LoaderInterface {
-  
-  public function load (): void;
+interface LoaderInterface
+{
+
+    public function load(): void;
 }

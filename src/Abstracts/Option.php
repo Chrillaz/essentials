@@ -3,97 +3,98 @@
 namespace Scaffold\Essentials\Abstracts;
 
 use Scaffold\Essentials\Essentials;
-
 use Scaffold\Essentials\Contracts\OptionInterface;
 
-abstract class Option implements OptionInterface {
+abstract class Option implements OptionInterface
+{
 
-  protected $name;
+    protected $name;
 
-  protected $capability;
+    protected $capability;
 
-  protected $default;
+    protected $default;
 
-  public function __construct( string $name, string $capability, $default ) {
-  
-    $this->name = $name;
+    public function __construct(string $name, string $capability, $default)
+    {
 
-    $this->capability = $capability;
+        $this->name = $name;
 
-    $this->default = $default;
-  }
+        $this->capability = $capability;
 
-  public function getName (): string {
-
-    return $this->name;
-  }
-
-  public function getDefault () {
-
-    return $this->default;
-  }
-
-  public function getCapability (): string {
-
-    return $this->capability;
-  }
-
-  public function getOption () {
-
-    return \get_option( $this->getName(), $this->getDefault() );
-  }
-
-  public function get ( string $key = null ) {
-
-    if ( is_null( $key ) ) {
-
-      return $this->getOption();
+        $this->default = $default;
     }
 
-    if ( ! is_array( $option = $this->getOption() ) ) {
+    public function getName(): string
+    {
 
-      throw new \Exception( 'Option is not array' );
-    }
-    
-    if ( array_key_exists( $key, $option ) ) {
-      
-      return \esc_attr( $option[$key] );
+        return $this->name;
     }
 
-    return false;
-  }
+    public function getDefault()
+    {
 
-  public function set ( string $key, $value ) {
-
-    if ( ! is_array( $option = $this->getOption() ) ) {
-
-      return \update_option( $this->getName(), $value );
+        return $this->default;
     }
 
-    if ( array_key_exists( $key, $option ) ) {
+    public function getCapability(): string
+    {
 
-      $option[$key] = $value;
-
-      return \update_option( $this->getName(), $option );
+        return $this->capability;
     }
 
-    throw new \Exception( 'Option not set' );
-  }
+    public function getOption()
+    {
 
-  public function remove ( string $key ) {
-
-    if ( $key === $this->getName() ) {
-
-      return \delete_option( $this->getName() );
+        return \get_option($this->getName(), $this->getDefault());
     }
 
-    if ( is_array( $option = $this->getOption() ) && array_key_exists( $key, $option ) ) {
+    public function get(string $key = null)
+    {
 
-      unset( $option[$key] );
+        if (is_null($key)) {
+            return $this->getOption();
+        }
 
-      return \update_option( $this->getName(), $option );
+        if (! is_array($option = $this->getOption())) {
+            throw new \Exception('Option is not array');
+        }
+
+        if (array_key_exists($key, $option)) {
+            return \esc_attr($option[$key]);
+        }
+
+        return false;
     }
-  }
 
-  abstract public static function register ( Essentials $container ): OptionInterface;
+    public function set(string $key, $value)
+    {
+
+        if (! is_array($option = $this->getOption())) {
+            return \update_option($this->getName(), $value);
+        }
+
+        if (array_key_exists($key, $option)) {
+            $option[$key] = $value;
+
+            return \update_option($this->getName(), $option);
+        }
+
+        throw new \Exception('Option not set');
+    }
+
+    public function remove(string $key)
+    {
+
+        if ($key === $this->getName()) {
+            return \delete_option($this->getName());
+        }
+
+        if (is_array($option = $this->getOption()) && array_key_exists($key, $option)) {
+            unset($option[$key]);
+
+            return \update_option($this->getName(), $option);
+        }
+    }
+
+    abstract public static function register(Essentials $container): OptionInterface;
 }
