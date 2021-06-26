@@ -105,40 +105,32 @@ class Essentials extends Container
         });
     }
 
-    public function getBasepath(string $relpath = null)
+    public function getBasepath(string $relpath = ''): string
     {
 
-        return is_null($relpath) ? $this->basepath : $this->basepath . $relpath;
+        return empty($relpath) ? $this->basepath : $this->basepath . $relpath;
     }
 
-    public function getPublicpath(string $relpath = null)
+    public function getPublicpath(string $relpath = ''): string
     {
 
-        return is_null($relpath) ? $this->publicpath : $this->publicpath . $relpath;
+        return empty($relpath) ? $this->publicpath : $this->publicpath . $relpath;
     }
 
-    public function getPublicdir()
+    public function getPublicdir(): string
     {
 
         return $this->publicdir;
     }
 
-    public function getNamespace()
+    public function getNamespace(): string
     {
 
-        if (! is_null($this->namespace)) {
-            return $this->namespace;
+        if ($this->namespace == null) {
+            $this->namespace = Util::getPackageNamespace($this->getBasepath('/composer.json'));
         }
 
-        $composer = \json_decode(\file_get_contents($this->getBasepath('/composer.json')), true);
-
-        if (isset($composer['autoload']) && isset($composer['autoload']['psr-4'])) {
-            foreach ($composer['autoload']['psr-4'] as $namespace => $path) {
-                if ('src/' === strtolower($path)) {
-                    return $this->namespace = $namespace;
-                }
-            }
-        }
+        return $this->namespace;
     }
 
     public static function create(...$args)

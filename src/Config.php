@@ -16,6 +16,7 @@ return [
     },
     \Scaffold\Essentials\Contracts\CacheInterface::class => \Scaffold\Essentials\Services\Cache::class,
     \Scaffold\Essentials\Contracts\AssetInterface::class => \Scaffold\Essentials\Resources\Asset::class,
+    \Scaffold\Essentials\Contracts\AssetBuilderInterface::class => \Scaffold\Essentials\Abstracts\AssetBuilder::class,
     \Scaffold\Essentials\Contracts\HookInterface::class => \Scaffold\Essentials\Resources\Hook::class
   ]
 ];
