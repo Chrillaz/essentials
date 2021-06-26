@@ -5,7 +5,7 @@ namespace Scaffold\Essentials\Resources;
 use Scaffold\Essentials\Contracts\AssetInterface;
 use Scaffold\Essentials\Contracts\AssetBuilderInterface;
 
-final class Script extends AssetBuilderInterface
+final class Script implements AssetBuilderInterface
 {
 
     protected $queue;
