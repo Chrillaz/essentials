@@ -29,9 +29,9 @@ class Essentials extends Container
 
         $this->publicdir = isset($publicdir) ? $publicdir : '';
 
-        $this->getNamespace();
-
         $this->registerConfig();
+        
+        $this->getNamespace();
 
         $this->bindModules();
 
@@ -101,7 +101,7 @@ class Essentials extends Container
 
             $hook = $this->make($hook->qualifiedname);
 
-            $hook->register();
+            $hook->register($this->make(\Scaffold\Essentials\Services\HookLoader::class));
         });
     }
 
@@ -126,19 +126,12 @@ class Essentials extends Container
     public function getNamespace()
     {
 
-        if (! is_null($this->namespace)) {
-            return $this->namespace;
+        if (is_null($this->namespace)) {
+
+            $this->namespace = $this->getConfig()['namespace'];
         }
 
-        $composer = \json_decode(\file_get_contents($this->getBasepath('/composer.json')), true);
-
-        if (isset($composer['autoload']) && isset($composer['autoload']['psr-4'])) {
-            foreach ($composer['autoload']['psr-4'] as $namespace => $path) {
-                if ('src/' === strtolower($path)) {
-                    return $this->namespace = $namespace;
-                }
-            }
-        }
+        return $this->namespace;
     }
 
     public static function create(...$args)
