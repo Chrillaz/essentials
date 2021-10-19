@@ -8,18 +8,14 @@ use Scaffold\Essentials\Services\HookLoader;
 final class ScriptLoader extends Hooks
 {
 
-    protected $hooks;
-
     protected $scripts;
 
     protected $styles;
 
     protected $critical = [];
 
-    public function __construct(HookLoader $hooks, \WP_Scripts $scripts, \WP_Styles $styles)
+    public function __construct(\WP_Scripts $scripts, \WP_Styles $styles)
     {
-
-        $this->hooks = $hooks;
 
         $this->scripts = $scripts;
 
@@ -90,15 +86,15 @@ final class ScriptLoader extends Hooks
         );
     }
 
-    public function register(): void
+    public function register(HookLoader $hooks): void
     {
 
-        $this->hooks->addFilter('script_loader_tag', 'scriptExecution', $this, 10, 2);
+        $hooks->addFilter('script_loader_tag', 'scriptExecution', $this, 10, 2);
 
-        $this->hooks->addFilter('style_loader_tag', 'styleExecution', $this, 10, 3);
+        $hooks->addFilter('style_loader_tag', 'styleExecution', $this, 10, 3);
 
-        $this->hooks->addAction('wp_head', 'criticalExecution', $this);
+        $hooks->addAction('wp_head', 'criticalExecution', $this);
 
-        $this->hooks->load();
+        $hooks->load();
     }
 }

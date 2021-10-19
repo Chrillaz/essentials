@@ -29,9 +29,9 @@ class Essentials extends Container
 
         $this->publicdir = isset($publicdir) ? $publicdir : '';
 
-        $this->getNamespace();
-
         $this->registerConfig();
+        
+        $this->getNamespace();
 
         $this->bindModules();
 
@@ -101,33 +101,34 @@ class Essentials extends Container
 
             $hook = $this->make($hook->qualifiedname);
 
-            $hook->register();
+            $hook->register($this->make(\Scaffold\Essentials\Services\HookLoader::class));
         });
     }
 
-    public function getBasepath(string $relpath = ''): string
+    public function getBasepath(string $relpath = null)
     {
 
-        return empty($relpath) ? $this->basepath : $this->basepath . $relpath;
+        return is_null($relpath) ? $this->basepath : $this->basepath . $relpath;
     }
 
-    public function getPublicpath(string $relpath = ''): string
+    public function getPublicpath(string $relpath = null)
     {
 
-        return empty($relpath) ? $this->publicpath : $this->publicpath . $relpath;
+        return is_null($relpath) ? $this->publicpath : $this->publicpath . $relpath;
     }
 
-    public function getPublicdir(): string
+    public function getPublicdir()
     {
 
         return $this->publicdir;
     }
 
-    public function getNamespace(): string
+    public function getNamespace()
     {
 
-        if ($this->namespace == null) {
-            $this->namespace = Util::getPackageNamespace($this->getBasepath('/composer.json'));
+        if (is_null($this->namespace)) {
+
+            $this->namespace = $this->getConfig()['namespace'];
         }
 
         return $this->namespace;
