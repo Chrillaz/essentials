@@ -1,5 +1,5 @@
 {
-    "name": "scaffold/wordpress-essentials",
+    "name": "chrillaz/scaffold-essentials",
     "description": "wordpress essentials, a set of abstractions to work on Scaffold Theme",
     "type": "package",
     "homepage": "https://github.com/Chrillaz/scaffold-essentials",
