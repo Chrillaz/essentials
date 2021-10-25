@@ -3,7 +3,7 @@
 namespace Scaffold\Essentials\Abstracts;
 
 use Scaffold\Essentials\Essentials;
-use Scaffold\Essentials\Contracts\CacheInterface;
+use Scaffold\Essentials\Contracts\Cache;
 use Scaffold\Essentials\Contracts\LoaderInterface;
 
 abstract class Loader implements LoaderInterface
@@ -15,7 +15,7 @@ abstract class Loader implements LoaderInterface
 
     protected $group = 'loadergroup';
 
-    public function __construct(CacheInterface $cache, Essentials $container)
+    public function __construct(Cache $cache, Essentials $container)
     {
 
         $this->queue = $cache;

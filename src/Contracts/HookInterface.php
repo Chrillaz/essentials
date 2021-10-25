@@ -2,7 +2,7 @@
 
 namespace Scaffold\Essentials\Contracts;
 
-interface HookInterface
+interface Hook
 {
 
     public function getType(): string;

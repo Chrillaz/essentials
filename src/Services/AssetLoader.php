@@ -14,7 +14,7 @@ class AssetLoader extends Loader
     public function addScript(string $handle, string $file = '')
     {
 
-        $asset = $this->container->makeWith(\Scaffold\Essentials\Contracts\AssetInterface::class, [
+        $asset = $this->container->makeWith(\Scaffold\Essentials\Contracts\Asset::class, [
             'handle' => $handle,
             'file'   => $file
         ]);
@@ -31,7 +31,7 @@ class AssetLoader extends Loader
     public function addStyle(string $handle, string $file = '')
     {
 
-        $asset = $this->container->makeWith(\Scaffold\Essentials\Contracts\AssetInterface::class, [
+        $asset = $this->container->makeWith(\Scaffold\Essentials\Contracts\Asset::class, [
             'handle' => $handle,
             'file'   => $file
         ]);

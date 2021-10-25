@@ -2,7 +2,7 @@
 
 namespace Scaffold\Essentials\Contracts;
 
-interface CacheInterface
+interface Cache
 {
 
     public function get(string $key, string $group = 'default');

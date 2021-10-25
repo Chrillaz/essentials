@@ -10,7 +10,7 @@ class HookLoader extends Loader
     public function addAction(...$args): void
     {
 
-        $this->add('actions', $this->container->make(\Scaffold\Essentials\Contracts\HookInterface::class, [
+        $this->add('actions', $this->container->make(\Scaffold\Essentials\Contracts\Hook::class, [
             'type' => 'action',  
             'args' => $args
         ]));
@@ -19,7 +19,7 @@ class HookLoader extends Loader
     public function addFilter(...$args): void
     {
 
-        $this->add('filters', $this->container->make(\Scaffold\Essentials\Contracts\HookInterface::class, [
+        $this->add('filters', $this->container->make(\Scaffold\Essentials\Contracts\Hook::class, [
             'type' => 'filter',
             'args' => $args
         ]));

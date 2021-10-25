@@ -3,10 +3,10 @@
 namespace Scaffold\Essentials\Resources;
 
 use Scaffold\Essentials\Essentials;
-use Scaffold\Essentials\Contracts\CacheInterface;
-use Scaffold\Essentials\Contracts\AssetInterface;
+use Scaffold\Essentials\Contracts\Cache;
+use Scaffold\Essentials\Contracts\Asset;
 
-class Asset implements AssetInterface
+class AssetImplementation implements Asset
 {
 
     private $cache;
@@ -17,7 +17,7 @@ class Asset implements AssetInterface
 
     private $file;
 
-    public function __construct(CacheInterface $cache, Essentials $container, $handle, $file)
+    public function __construct(Cache $cache, Essentials $container, $handle, $file)
     {
 
         $this->cache = $cache;

@@ -2,9 +2,9 @@
 
 namespace Scaffold\Essentials\Services;
 
-use Scaffold\Essentials\Contracts\CacheInterface;
+use Scaffold\Essentials\Contracts\Cache;
 
-class Cache implements CacheInterface
+class CacheImplementation implements Cache
 {
 
     protected $cache;

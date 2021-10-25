@@ -2,9 +2,9 @@
 
 namespace Scaffold\Essentials\Resources;
 
-use Scaffold\Essentials\Contracts\HookInterface;
+use Scaffold\Essentials\Contracts\Hook;
 
-final class Hook implements HookInterface
+final class HookImplementation implements Hook
 {
 
     protected $type;

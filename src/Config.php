@@ -14,8 +14,9 @@ return [
         global $wp_object_cache;
         return $wp_object_cache;
     },
-    \Scaffold\Essentials\Contracts\CacheInterface::class => \Scaffold\Essentials\Services\Cache::class,
-    \Scaffold\Essentials\Contracts\AssetInterface::class => \Scaffold\Essentials\Resources\Asset::class,
-    \Scaffold\Essentials\Contracts\HookInterface::class => \Scaffold\Essentials\Resources\Hook::class
+    \Scaffold\Essentials\Contracts\Fs::class => \Scaffold\Essentials\Services\FsImplementation::class,
+    \Scaffold\Essentials\Contracts\Cache::class => \Scaffold\Essentials\Services\CacheImplementation::class,
+    \Scaffold\Essentials\Contracts\Asset::class => \Scaffold\Essentials\Resources\AssetImplementation::class,
+    \Scaffold\Essentials\Contracts\Hook::class => \Scaffold\Essentials\Resources\HookImplementation::class
   ]
 ];

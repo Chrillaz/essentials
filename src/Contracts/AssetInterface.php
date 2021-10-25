@@ -2,7 +2,7 @@
 
 namespace Scaffold\Essentials\Contracts;
 
-interface AssetInterface
+interface Asset
 {
 
     public function getHandle(): string;
